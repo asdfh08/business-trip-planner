@@ -35,7 +35,8 @@
 - обработка некорректного ввода и ошибок файлов данных.
 
 ## Структура проекта
-business-trip-planner/
+
+```business-trip-planner/
 ├── README.md
 ├── requirements.txt
 ├── main.py — точка запуска, меню приложения
@@ -48,7 +49,7 @@ business-trip-planner/
 │ └── trips.json
 └── tests/
 ├── test_employees.py
-└── test_trips.py
+└── test_trips.py```
 
 ## Формат хранения данных
 Сотрудники и командировки хранятся в файлах `data/employees.json` и
@@ -67,7 +68,7 @@ python main.py
 
 ## Запуск тестов и проверка качества кода 
 python -m pytest 
-python -m
+python -m flake8
 
 ## План развития
 На следующих этапах планируется:
