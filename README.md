@@ -49,7 +49,8 @@
 │ └── trips.json
 └── tests/
 ├── test_employees.py
-└── test_trips.py```
+└── test_trips.py
+```
 
 ## Формат хранения данных
 Сотрудники и командировки хранятся в файлах `data/employees.json` и
