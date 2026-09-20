@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "employee_id": 1,
+    "destination": "Санкт-Петербург",
+    "start_date": "2026-10-05",
+    "end_date": "2026-10-10",
+    "budget_limit": 50000,
+    "expenses": 42500,
+    "status": "запланирована"
+  }
+]
