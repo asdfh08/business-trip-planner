@@ -4,7 +4,6 @@
 from datetime import date, datetime
 
 
-
 # id сотрудника
 def input_int(prompt: str) -> int:
     """Запросить у пользователя целое число.
@@ -20,7 +19,6 @@ def input_int(prompt: str) -> int:
             print("Ошибка: введите целое число.")
 
 
-
 # сумма
 def input_float(prompt: str) -> float:
     """Запросить у пользователя вещественное число (например, сумму).
@@ -33,7 +31,6 @@ def input_float(prompt: str) -> float:
             return float(raw_value)
         except ValueError:
             print("Ошибка: введите число (например, 42500 или 42500.50).")
-
 
 
 # дата

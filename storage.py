@@ -58,4 +58,3 @@ def save_trips(filename: str, trips: list[dict]) -> None:
         serializable_trips.append(trip_copy)
     with open(filename, "w", encoding="utf-8") as file:
         json.dump(serializable_trips, file, ensure_ascii=False, indent=2)
-        

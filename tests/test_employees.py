@@ -37,4 +37,3 @@ def test_get_employee():
     employee = get_employee(employees, new_id)
     assert employee is not None
     assert employee["position"] == "Менеджер"
-    
