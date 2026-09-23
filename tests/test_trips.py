@@ -1,6 +1,7 @@
 """Автоматизированные тесты функций работы с командировками."""
 
 from datetime import date
+
 import pytest
 
 from trips import (
@@ -33,7 +34,7 @@ def test_is_employee_traveling_false_for_empty_list():
 def test_create_trip_adds_trip():
     trips = []
     trip = create_trip(
-        trips, 1, "Казань", date(2026, 11, 1), date(2026, 11, 5), 30000
+        trips, 1, 1, date(2026, 11, 1), date(2026, 11, 5), 30000
     )
     assert len(trips) == 1
     assert trip["status"] == "запланирована"
@@ -42,18 +43,18 @@ def test_create_trip_adds_trip():
 def test_create_trip_forbids_overlap():
     trips = []
     create_trip(
-        trips, 1, "Казань", date(2026, 11, 1), date(2026, 11, 5), 30000
+        trips, 1, 1, date(2026, 11, 1), date(2026, 11, 5), 30000
     )
     with pytest.raises(ValueError):
         create_trip(
-            trips, 1, "Сочи", date(2026, 11, 3), date(2026, 11, 7), 20000
+            trips, 1, 2, date(2026, 11, 3), date(2026, 11, 7), 20000
         )
 
 
 def test_cancel_trip():
     trips = []
     trip = create_trip(
-        trips, 1, "Казань", date(2026, 11, 1), date(2026, 11, 5), 30000
+        trips, 1, 1, date(2026, 11, 1), date(2026, 11, 5), 30000
     )
     assert cancel_trip(trips, trip["id"]) is True
     assert trips[0]["status"] == "отменена"

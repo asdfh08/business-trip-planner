@@ -3,6 +3,7 @@ from datetime import date
 from typing import Iterator
 
 from employees import get_employee
+from routes import get_route, get_route_description
 
 
 def calculate_trip_duration(start_date: date, end_date: date) -> int:
@@ -21,14 +22,18 @@ def check_budget_status(expenses: float, limit: float) -> str:
         return "Расходы в пределах бюджета"
 
 
-def get_trip_summary(employees: dict[int, dict], trip: dict) -> str:
+def get_trip_summary(
+    employees: dict[int, dict], routes: dict[int, dict], trip: dict
+) -> str:
     """Формирует краткую сводку по командировке (развитие функции ПР1)."""
     employee = get_employee(employees, trip["employee_id"])
     name = employee["name"] if employee else "Неизвестный сотрудник"
+    route = get_route(routes, trip["route_id"])
+    route_text = get_route_description(route) if route else "маршрут не найден"
     duration = calculate_trip_duration(trip["start_date"], trip["end_date"])
     return (
         f"Сотрудник {name} отправляется в командировку "
-        f"в город {trip['destination']} на {duration} дн."
+        f"по маршруту {route_text} на {duration} дн."
     )
 
 
@@ -49,7 +54,7 @@ def is_employee_traveling(
 def create_trip(
     trips: list[dict],
     employee_id: int,
-    destination: str,
+    route_id: int,
     start_date: date,
     end_date: date,
     budget_limit: float,
@@ -68,7 +73,7 @@ def create_trip(
     trip = {
         "id": new_id,
         "employee_id": employee_id,
-        "destination": destination,
+        "route_id": route_id,
         "start_date": start_date,
         "end_date": end_date,
         "budget_limit": budget_limit,

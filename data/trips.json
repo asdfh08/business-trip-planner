@@ -2,7 +2,7 @@
   {
     "id": 1,
     "employee_id": 1,
-    "destination": "Санкт-Петербург",
+    "route_id": 1,
     "start_date": "2026-10-05",
     "end_date": "2026-10-10",
     "budget_limit": 50000,

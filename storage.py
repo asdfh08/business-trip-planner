@@ -58,3 +58,41 @@ def save_trips(filename: str, trips: list[dict]) -> None:
         serializable_trips.append(trip_copy)
     with open(filename, "w", encoding="utf-8") as file:
         json.dump(serializable_trips, file, ensure_ascii=False, indent=2)
+
+
+def load_routes(filename: str) -> dict[int, dict]:
+    """Загрузить маршруты из JSON-файла."""
+    try:
+        with open(filename, encoding="utf-8") as file:
+            raw_routes = json.load(file)
+    except FileNotFoundError:
+        print(f"Файл {filename} не найден, маршруты не загружены.")
+        return {}
+    except json.JSONDecodeError:
+        print(f"Файл {filename} повреждён, маршруты не загружены.")
+        return {}
+    return {int(item["id"]): item for item in raw_routes}
+
+
+def save_routes(filename: str, routes: dict[int, dict]) -> None:
+    """Сохранить маршруты в JSON-файл."""
+    with open(filename, "w", encoding="utf-8") as file:
+        json.dump(list(routes.values()), file, ensure_ascii=False, indent=2)
+def load_routes(filename: str) -> dict[int, dict]:
+    """Загрузить маршруты из JSON-файла."""
+    try:
+        with open(filename, encoding="utf-8") as file:
+            raw_routes = json.load(file)
+    except FileNotFoundError:
+        print(f"Файл {filename} не найден, маршруты не загружены.")
+        return {}
+    except json.JSONDecodeError:
+        print(f"Файл {filename} повреждён, маршруты не загружены.")
+        return {}
+    return {int(item["id"]): item for item in raw_routes}
+
+
+def save_routes(filename: str, routes: dict[int, dict]) -> None:
+    """Сохранить маршруты в JSON-файл."""
+    with open(filename, "w", encoding="utf-8") as file:
+        json.dump(list(routes.values()), file, ensure_ascii=False, indent=2)

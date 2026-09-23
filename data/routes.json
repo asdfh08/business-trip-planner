@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "origin": "Москва",
+    "destination": "Санкт-Петербург",
+    "transport": "Поезд"
+  },
+  {
+    "id": 2,
+    "origin": "Москва",
+    "destination": "Казань",
+    "transport": "Самолёт"
+  }
+]
