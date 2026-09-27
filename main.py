@@ -1,7 +1,26 @@
-"""Точка запуска приложения «Сервис планирования командировок»."""
+"""Точка запуска приложения «Сервис планирования командировок».
 
-from employees import add_employee, find_employee
-from routes import add_route, get_route_description
+Приложение работает с объектами Employee, Route и Trip. Данные
+загружаются из JSON и сохраняются обратно через модуль storage.py.
+"""
+
+from typing import List
+
+from models import Employee, Route, Trip
+from models.employees import (
+    add_employee,
+    find_employee,
+    find_employee_by_id,
+    show_employees,
+)
+from models.routes import add_route, find_route_by_id, show_routes
+from models.trips import (
+    cancel_trip,
+    create_trip,
+    find_trip_by_id,
+    get_statistics,
+    show_trips,
+)
 from storage import (
     load_employees,
     load_routes,
@@ -9,14 +28,6 @@ from storage import (
     save_employees,
     save_routes,
     save_trips,
-)
-from trips import (
-    cancel_trip,
-    check_budget_status,
-    create_trip,
-    get_statistics,
-    get_trip_summary,
-    sort_trips_by_date,
 )
 from utils import input_date, input_float, input_int
 
@@ -40,65 +51,39 @@ MENU = """
 """
 
 
-def show_employees(employees: dict[int, dict]) -> None:
-    """Вывести список сотрудников."""
-    if not employees:
-        print("Список сотрудников пуст.")
-        return
-    for employee in employees.values():
-        print(f"{employee['id']}. {employee['name']} — {employee['position']}")
-
-
-def show_trips(
-    employees: dict[int, dict], routes: dict[int, dict], trips: list[dict]
-) -> None:
-    """Вывести список командировок, отсортированных по дате начала."""
-    if not trips:
-        print("Список командировок пуст.")
-        return
-    for trip in sort_trips_by_date(trips):
-        print(
-            f"{trip['id']}. {get_trip_summary(employees, routes, trip)} "
-            f"[{trip['status']}]"
-        )
-
-
-def handle_add_employee(employees: dict[int, dict]) -> None:
-    """Обработать сценарий добавления сотрудника."""
+def handle_add_employee(employees: List[Employee]) -> None:
+    """Добавить сотрудника по данным, введённым пользователем."""
     name = input("Имя сотрудника: ")
     position = input("Должность: ")
-    new_id = add_employee(employees, name, position)
-    print(f"Сотрудник добавлен, id = {new_id}")
+    employee = add_employee(employees, name, position)
+    print(f"Сотрудник добавлен: {employee}")
 
 
-def show_routes(routes: dict[int, dict]) -> None:
-    """Вывести список маршрутов."""
-    if not routes:
-        print("Список маршрутов пуст.")
-        return
-    for route in routes.values():
-        print(f"{route['id']}. {get_route_description(route)}")
+def handle_find_employee(employees: List[Employee]) -> None:
+    """Найти сотрудников по подстроке имени."""
+    query = input("Подстрока имени: ")
+    show_employees(find_employee(employees, query))
 
 
-def handle_add_route(routes: dict[int, dict]) -> None:
-    """Обработать сценарий добавления маршрута."""
+def handle_add_route(routes: List[Route]) -> None:
+    """Добавить маршрут по данным, введённым пользователем."""
     origin = input("Город отправления: ")
     destination = input("Город назначения: ")
     transport = input("Транспорт (поезд/самолёт/автомобиль): ")
-    new_id = add_route(routes, origin, destination, transport)
-    print(f"Маршрут добавлен, id = {new_id}")
+    route = add_route(routes, origin, destination, transport)
+    print(f"Маршрут добавлен: {route.id}. {route}")
 
 
-def handle_add_trip(
-    employees: dict[int, dict], routes: dict[int, dict], trips: list[dict]
+def create_new_trip(
+    trips: List[Trip], employees: List[Employee], routes: List[Route]
 ) -> None:
-    """Обработать сценарий добавления командировки."""
-    employee_id = input_int("Id сотрудника: ")
-    if employee_id not in employees:
+    """Сценарий создания командировки: сотрудник + маршрут + даты."""
+    employee = find_employee_by_id(employees, input_int("Id сотрудника: "))
+    if employee is None:
         print("Сотрудник с таким id не найден.")
         return
-    route_id = input_int("Id маршрута: ")
-    if route_id not in routes:
+    route = find_route_by_id(routes, input_int("Id маршрута: "))
+    if route is None:
         print("Маршрут с таким id не найден.")
         return
     start_date = input_date("Дата начала (ДД.ММ.ГГГГ): ")
@@ -106,36 +91,36 @@ def handle_add_trip(
     budget_limit = input_float("Лимит бюджета, руб.: ")
     try:
         trip = create_trip(
-            trips, employee_id, route_id, start_date, end_date, budget_limit
+            trips, employee, route, start_date, end_date, budget_limit
         )
     except ValueError as error:
         print(f"Не удалось создать командировку: {error}")
         return
-    print(f"Командировка создана, id = {trip['id']}")
+    if trip is None:
+        print("Сотрудник уже находится в другой командировке в этот период.")
+        return
+    print(f"Командировка создана: {trip}")
 
 
-def handle_cancel_trip(trips: list[dict]) -> None:
-    """Обработать сценарий отмены командировки."""
-    trip_id = input_int("Id командировки для отмены: ")
-    if cancel_trip(trips, trip_id):
+def handle_cancel_trip(trips: List[Trip]) -> None:
+    """Отменить командировку по id."""
+    if cancel_trip(trips, input_int("Id командировки для отмены: ")):
         print("Командировка отменена.")
     else:
         print("Командировка с таким id не найдена.")
 
 
-def handle_check_budget(trips: list[dict]) -> None:
-    """Обработать сценарий проверки расходов по командировке."""
-    trip_id = input_int("Id командировки: ")
-    trip = next((item for item in trips if item["id"] == trip_id), None)
+def handle_set_expenses(trips: List[Trip]) -> None:
+    """Внести расходы и показать результат сверки с бюджетом."""
+    trip = find_trip_by_id(trips, input_int("Id командировки: "))
     if trip is None:
         print("Командировка с таким id не найдена.")
         return
-    expenses = input_float("Фактические расходы, руб.: ")
-    trip["expenses"] = expenses
-    print(check_budget_status(expenses, trip["budget_limit"]))
+    trip.set_expenses(input_float("Фактические расходы, руб.: "))
+    print(trip.get_budget_status())
 
 
-def show_statistics(trips: list[dict]) -> None:
+def show_statistics(trips: List[Trip]) -> None:
     """Вывести краткую статистику по командировкам."""
     stats = get_statistics(trips)
     print(f"Всего командировок: {stats['total_trips']}")
@@ -145,10 +130,10 @@ def show_statistics(trips: list[dict]) -> None:
 
 
 def main() -> None:
-    """Точка запуска приложения: меню и вызов функций проекта."""
+    """Загрузить данные, запустить меню и сохранить данные при выходе."""
     employees = load_employees(EMPLOYEES_FILE)
     routes = load_routes(ROUTES_FILE)
-    trips = load_trips(TRIPS_FILE)
+    trips = load_trips(TRIPS_FILE, employees, routes)
 
     while True:
         print(MENU)
@@ -159,21 +144,19 @@ def main() -> None:
         elif choice == "2":
             handle_add_employee(employees)
         elif choice == "3":
-            query = input("Подстрока имени: ")
-            found = find_employee(employees, query)
-            show_employees({item["id"]: item for item in found})
+            handle_find_employee(employees)
         elif choice == "4":
             show_routes(routes)
         elif choice == "5":
             handle_add_route(routes)
         elif choice == "6":
-            show_trips(employees, routes, trips)
+            show_trips(trips)
         elif choice == "7":
-            handle_add_trip(employees, routes, trips)
+            create_new_trip(trips, employees, routes)
         elif choice == "8":
             handle_cancel_trip(trips)
         elif choice == "9":
-            handle_check_budget(trips)
+            handle_set_expenses(trips)
         elif choice == "10":
             show_statistics(trips)
         elif choice == "0":

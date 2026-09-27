@@ -7,6 +7,6 @@
     "end_date": "2026-10-10",
     "budget_limit": 50000,
     "expenses": 42500,
-    "status": "запланирована"
+    "is_cancelled": false
   }
 ]
