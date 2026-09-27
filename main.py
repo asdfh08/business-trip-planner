@@ -1,7 +1,7 @@
 """Точка запуска приложения «Сервис планирования командировок»."""
 
 from employees import add_employee, find_employee
-from routes import add_route, find_route, get_route_description
+from routes import add_route, get_route_description
 from storage import (
     load_employees,
     load_routes,
@@ -70,6 +70,7 @@ def handle_add_employee(employees: dict[int, dict]) -> None:
     new_id = add_employee(employees, name, position)
     print(f"Сотрудник добавлен, id = {new_id}")
 
+
 def show_routes(routes: dict[int, dict]) -> None:
     """Вывести список маршрутов."""
     if not routes:
@@ -86,6 +87,7 @@ def handle_add_route(routes: dict[int, dict]) -> None:
     transport = input("Транспорт (поезд/самолёт/автомобиль): ")
     new_id = add_route(routes, origin, destination, transport)
     print(f"Маршрут добавлен, id = {new_id}")
+
 
 def handle_add_trip(
     employees: dict[int, dict], routes: dict[int, dict], trips: list[dict]
@@ -182,6 +184,7 @@ def main() -> None:
             break
         else:
             print("Неизвестный пункт меню, попробуйте снова.")
+
 
 if __name__ == "__main__":
     main()
