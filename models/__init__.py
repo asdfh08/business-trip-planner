@@ -5,4 +5,3 @@ from .routes import Route
 from .trips import Trip
 
 __all__ = ["Employee", "Route", "Trip"]
-
