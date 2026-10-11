@@ -146,11 +146,12 @@ def sort_trips_by_date(trips: List[Trip]) -> List[Trip]:
 
 
 def filter_expensive_trips(
-    trips: List[Trip], threshold: float
+        trips: List[Trip], threshold: float
 ) -> Iterator[Trip]:
     """Вернуть генератор командировок с расходами выше порога."""
     return (
-        trip for trip in trips
+        trip
+        for trip in trips
         if trip.expenses is not None and trip.expenses > threshold
     )
 

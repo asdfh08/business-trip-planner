@@ -26,7 +26,8 @@ def test_trip_creation_links_objects():
     employee = make_employee()
     route = make_route()
     trip = Trip(
-        1, employee, route, date(2026, 10, 5), date(2026, 10, 10), 50000
+        1, employee, route,
+        date(2026, 10, 5), date(2026, 10, 10), 50000,
     )
     assert trip.id == 1
     assert trip.employee is employee
@@ -37,16 +38,24 @@ def test_trip_creation_links_objects():
 
 def test_trip_duration():
     trip = Trip(
-        1, make_employee(), make_route(),
-        date(2026, 10, 5), date(2026, 10, 10), 50000,
+        1,
+        make_employee(),
+        make_route(),
+        date(2026, 10, 5),
+        date(2026, 10, 10),
+        50000,
     )
     assert trip.duration() == 5
 
 
 def test_trip_str_contains_route_and_employee():
     trip = Trip(
-        1, make_employee(), make_route(),
-        date(2026, 10, 5), date(2026, 10, 10), 50000,
+        1,
+        make_employee(),
+        make_route(),
+        date(2026, 10, 5),
+        date(2026, 10, 10),
+        50000,
     )
     text = str(trip)
     assert "Иванова Мария" in text
@@ -56,8 +65,12 @@ def test_trip_str_contains_route_and_employee():
 
 def test_trip_cancel():
     trip = Trip(
-        1, make_employee(), make_route(),
-        date(2026, 10, 5), date(2026, 10, 10), 50000,
+        1,
+        make_employee(),
+        make_route(),
+        date(2026, 10, 5),
+        date(2026, 10, 10),
+        50000,
     )
     trip.cancel()
     assert trip.is_cancelled
@@ -65,8 +78,12 @@ def test_trip_cancel():
 
 def test_trip_budget_status():
     trip = Trip(
-        1, make_employee(), make_route(),
-        date(2026, 10, 5), date(2026, 10, 10), 50000,
+        1,
+        make_employee(),
+        make_route(),
+        date(2026, 10, 5),
+        date(2026, 10, 10),
+        50000,
     )
     trip.set_expenses(42500)
     assert trip.get_budget_status() == "Расходы в пределах бюджета"
@@ -79,8 +96,12 @@ def test_check_budget_status_exceeded():
 def test_trip_invalid_dates_raise_error():
     with pytest.raises(ValueError):
         Trip(
-            1, make_employee(), make_route(),
-            date(2026, 10, 10), date(2026, 10, 5), 50000,
+            1,
+            make_employee(),
+            make_route(),
+            date(2026, 10, 10),
+            date(2026, 10, 5),
+            50000,
         )
 
 
@@ -92,8 +113,12 @@ def test_validate_dates_static_method():
 def test_create_trip_adds_trip():
     trips = []
     trip = create_trip(
-        trips, make_employee(), make_route(),
-        date(2026, 11, 1), date(2026, 11, 5), 30000,
+        trips,
+        make_employee(),
+        make_route(),
+        date(2026, 11, 1),
+        date(2026, 11, 5),
+        30000,
     )
     assert trip is not None
     assert trips == [trip]
@@ -104,7 +129,8 @@ def test_create_trip_forbids_overlap():
     employee = make_employee()
     route = make_route()
     create_trip(
-        trips, employee, route, date(2026, 11, 1), date(2026, 11, 5), 30000
+        trips, employee, route,
+        date(2026, 11, 1), date(2026, 11, 5), 30000,
     )
     second = create_trip(
         trips, employee, route, date(2026, 11, 3), date(2026, 11, 7), 20000
@@ -137,8 +163,12 @@ def test_is_employee_traveling_false_for_empty_list():
 def test_cancel_trip():
     trips = []
     trip = create_trip(
-        trips, make_employee(), make_route(),
-        date(2026, 11, 1), date(2026, 11, 5), 30000,
+        trips,
+        make_employee(),
+        make_route(),
+        date(2026, 11, 1),
+        date(2026, 11, 5),
+        30000,
     )
     assert cancel_trip(trips, trip.id) is True
     assert trips[0].is_cancelled

@@ -45,6 +45,6 @@ def input_date(prompt: str) -> date:
             return datetime.strptime(raw_value, "%d.%m.%Y").date()
         except ValueError:
             print(
-                "Ошибка: введите дату в формате ДД.ММ.ГГГГ "
-                "(например, 05.10.2026)."
+                "Ошибка: введите дату в формате"
+                "ДД.ММ.ГГГГ " "(например, 05.10.2026)."
             )

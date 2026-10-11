@@ -27,7 +27,7 @@ class Employee:
 
 
 def add_employee(
-    employees: List[Employee], name: str, position: str
+        employees: List[Employee], name: str, position: str,
 ) -> Employee:
     """Создать объект Employee и добавить его в коллекцию."""
     new_id = max((employee.id for employee in employees), default=0) + 1
@@ -40,8 +40,7 @@ def find_employee(employees: List[Employee], query: str) -> List[Employee]:
     """Найти сотрудников по подстроке имени (без учёта регистра)."""
     query_lower = query.lower()
     return [
-        employee
-        for employee in employees
+        employee for employee in employees
         if query_lower in employee.name.lower()
     ]
 

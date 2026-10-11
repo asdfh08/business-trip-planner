@@ -91,7 +91,8 @@ def create_new_trip(
     budget_limit = input_float("Лимит бюджета, руб.: ")
     try:
         trip = create_trip(
-            trips, employee, route, start_date, end_date, budget_limit
+            trips, employee, route,
+            start_date, end_date, budget_limit,
         )
     except ValueError as error:
         print(f"Не удалось создать командировку: {error}")
