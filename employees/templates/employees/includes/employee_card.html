@@ -1,0 +1,6 @@
+<li class="list-group-item">
+    <a href="{% url 'employees:employee_detail' employee.id %}">
+        {{ employee.name|default:"Без имени" }}
+    </a>
+    — {{ employee.position|lower }}
+</li>

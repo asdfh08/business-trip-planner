@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Командировки — Сервис командировок{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Командировки ({{ trips|length }})</h1>
+<ul class="list-group">
+    {% for trip in trips %}
+        <li class="list-group-item">
+            <a href="{% url 'trips:trip_detail' trip.id %}">
+                Командировка #{{ trip.id }}
+            </a>
+            — {{ trip.employee.name }},
+            {{ trip.start_date|date:"d.m.Y" }} –
+            {{ trip.end_date|date:"d.m.Y" }}
+            {% include "trips/includes/trip_status.html" %}
+        </li>
+    {% empty %}
+        <li class="list-group-item">Нет командировок</li>
+    {% endfor %}
+</ul>
+{% endblock %}

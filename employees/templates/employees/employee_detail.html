@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if employee %}{{ employee.name }}{% else %}Не найден{% endif %}
+    — Сервис командировок
+{% endblock %}
+
+{% block content %}
+{% if employee %}
+    <h1 class="my-4">{{ employee.name }}</h1>
+    <div class="card app-card p-3">
+        <p><strong>Должность:</strong> {{ employee.position }}</p>
+        <p><strong>Телефон:</strong> {{ employee.phone }}</p>
+        <p>
+            <strong>Статус:</strong>
+            {% if traveling %}
+                <span class="badge bg-warning">В командировке</span>
+            {% else %}
+                <span class="badge bg-success">На месте</span>
+            {% endif %}
+        </p>
+    </div>
+    <a href="{% url 'employees:employees' %}"
+       class="btn btn-outline-secondary mt-3">← к списку сотрудников</a>
+{% else %}
+    <h1 class="my-4">Сотрудник не найден</h1>
+    <a href="{% url 'employees:employees' %}"
+       class="btn btn-outline-secondary">← к списку сотрудников</a>
+{% endif %}
+{% endblock %}

@@ -1,12 +1,32 @@
 [
-  {
-    "id": 1,
-    "employee_id": 1,
-    "route_id": 1,
-    "start_date": "2026-10-05",
-    "end_date": "2026-10-10",
-    "budget_limit": 50000,
-    "expenses": 42500,
-    "is_cancelled": false
-  }
+    {
+        "id": 1,
+        "employee_id": 1,
+        "route_id": 1,
+        "start_date": "2026-03-01",
+        "end_date": "2026-03-10",
+        "budget_limit": 50000,
+        "expenses": 48000,
+        "is_cancelled": false
+    },
+    {
+        "id": 2,
+        "employee_id": 2,
+        "route_id": 1,
+        "start_date": "2026-10-10",
+        "end_date": "2026-10-20",
+        "budget_limit": 60000,
+        "expenses": null,
+        "is_cancelled": false
+    },
+    {
+        "id": 3,
+        "employee_id": 1,
+        "route_id": 1,
+        "start_date": "2026-05-01",
+        "end_date": "2026-05-05",
+        "budget_limit": 30000,
+        "expenses": null,
+        "is_cancelled": true
+    }
 ]

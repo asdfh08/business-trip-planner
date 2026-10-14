@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if trip %}Командировка #{{ trip.id }}{% else %}Не найдена{% endif %}
+    — Сервис командировок
+{% endblock %}
+
+{% block content %}
+{% if trip %}
+    <h1 class="my-4">
+        Командировка #{{ trip.id }}
+        {% include "trips/includes/trip_status.html" %}
+    </h1>
+    <div class="card app-card p-3">
+        <p><strong>Сотрудник:</strong>
+            <a href="{% url 'employees:employee_detail' trip.employee.id %}">{{ trip.employee.name }}</a>
+            — {{ trip.employee.position|lower }}
+        </p>
+        <p><strong>Маршрут:</strong>
+            {{ trip.route.origin }} → {{ trip.route.destination }}
+        </p>
+        <p><strong>Даты:</strong>
+            {{ trip.start_date|date:"d.m.Y" }} –
+            {{ trip.end_date|date:"d.m.Y" }}
+            ({{ trip.duration }} дн.)
+        </p>
+        <p><strong>Бюджет:</strong>
+            {{ trip.budget_limit }} ₽
+        </p>
+        <p><strong>Расходы:</strong>
+            {{ trip.expenses|default_if_none:"не внесены" }}
+        </p>
+        <p><strong>Сверка бюджета:</strong>
+            {{ trip.get_budget_status }}
+        </p>
+    </div>
+    <a href="{% url 'trips:trips' %}"
+       class="btn btn-outline-secondary mt-3">← к списку командировок</a>
+{% else %}
+    <h1 class="my-4">Командировка не найдена</h1>
+    <a href="{% url 'trips:trips' %}"
+       class="btn btn-outline-secondary">← к списку командировок</a>
+{% endif %}
+{% endblock %}

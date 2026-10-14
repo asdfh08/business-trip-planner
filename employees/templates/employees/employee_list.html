@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Сотрудники — Сервис командировок{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Сотрудники ({{ employees|length }})</h1>
+<ul class="list-group">
+    {% for employee in employees %}
+        {% include "employees/includes/employee_card.html" %}
+    {% empty %}
+        <li class="list-group-item">Нет сотрудников</li>
+    {% endfor %}
+</ul>
+{% endblock %}

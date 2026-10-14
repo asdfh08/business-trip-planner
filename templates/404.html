@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Страница не найдена — Сервис командировок{% endblock %}
+
+{% block content %}
+<h1 class="my-4">404 — Страница не найдена</h1>
+<p>Запрошенная страница не существует.</p>
+<a href="{% url 'homepage:index' %}"
+   class="btn btn-outline-primary">На главную</a>
+{% endblock %}
