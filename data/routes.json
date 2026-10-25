@@ -10,5 +10,11 @@
     "origin": "Москва",
     "destination": "Казань",
     "transport": "Самолёт"
+  },
+  {
+    "id": 3,
+    "origin": "Москва",
+    "destination": "Екатеринбург",
+    "transport": "Самолёт"
   }
 ]

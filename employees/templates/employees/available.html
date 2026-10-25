@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Свободные сотрудники — Сервис командировок{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Свободные сотрудники</h1>
+<p>Сотрудники, у которых на выбранную дату нет активной командировки.</p>
+
+<form method="get" class="row g-2 align-items-end mb-4">
+    <div class="col-auto">
+        <label for="date" class="form-label">Дата:</label>
+        <input type="date" id="date" name="date"
+               class="form-control" value="{{ selected_date }}">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Найти</button>
+    </div>
+</form>
+
+{% if error %}
+    <div class="alert alert-warning">{{ error }}</div>
+{% elif selected_date %}
+    <h2 class="h4">Свободны на {{ selected_date }}</h2>
+    <ul class="list-group">
+        {% for employee in employees %}
+            {% include "employees/includes/employee_card.html" %}
+        {% empty %}
+            <li class="list-group-item">
+                На выбранную дату все сотрудники в командировках.
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<a href="{% url 'employees:employees' %}"
+   class="btn btn-outline-secondary mt-3">← к списку сотрудников</a>
+{% endblock %}

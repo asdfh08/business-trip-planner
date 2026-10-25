@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Статистика — Сервис командировок{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Статистика командировок</h1>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card app-card p-3 h-100">
+            <div class="text-muted">Всего командировок</div>
+            <div class="fs-3">{{ summary.total_trips }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card app-card p-3 h-100">
+            <div class="text-muted">Активных / отменённых</div>
+            <div class="fs-3">
+                {{ summary.active_trips|default:0 }} / {{ summary.cancelled_trips|default:0 }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card app-card p-3 h-100">
+            <div class="text-muted">Внесено расходов</div>
+            <div class="fs-3">{{ summary.total_expenses|default:0|floatformat:"-2" }} ₽</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card app-card p-3 h-100">
+            <div class="text-muted">Средний бюджет</div>
+            <div class="fs-3">{{ summary.avg_budget|default:0|floatformat:"0" }} ₽</div>
+        </div>
+    </div>
+</div>
+
+<h2 class="h4">По сотрудникам</h2>
+<p class="text-muted">Активные командировки и внесённые по ним расходы.</p>
+<table class="table">
+    <thead>
+        <tr><th>Сотрудник</th><th>Командировок</th><th>Расходы, ₽</th></tr>
+    </thead>
+    <tbody>
+        {% for item in by_employee %}
+            <tr>
+                <td>{{ item.employee_name }}</td>
+                <td>{{ item.trips_count }}</td>
+                <td>{{ item.total_expenses|floatformat:"-2" }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="3">Данные отсутствуют.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 class="h4 mt-4">По маршрутам</h2>
+<table class="table">
+    <thead>
+        <tr><th>Маршрут</th><th>Транспорт</th><th>Командировок</th></tr>
+    </thead>
+    <tbody>
+        {% for item in by_route %}
+            <tr>
+                <td>{{ item.origin }} → {{ item.destination }}</td>
+                <td>{{ item.transport }}</td>
+                <td>{{ item.trips_count }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="3">Данные отсутствуют.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 class="h4 mt-4">Частые командировки</h2>
+<form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-auto">
+        <label for="min_trips" class="form-label">
+            Сотрудники, у которых активных командировок больше:
+        </label>
+        <input type="number" id="min_trips" name="min_trips" min="0"
+               class="form-control" value="{{ min_trips }}">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Показать</button>
+    </div>
+</form>
+<ul class="list-group">
+    {% for item in frequent %}
+        <li class="list-group-item">
+            {{ item.employee_name }} — {{ item.trips_count }}
+        </li>
+    {% empty %}
+        <li class="list-group-item">Таких сотрудников нет.</li>
+    {% endfor %}
+</ul>
+
+<h2 class="h4 mt-4">Превышение бюджета</h2>
+<ul class="list-group">
+    {% for item in over_budget %}
+        <li class="list-group-item">
+            <a href="{% url 'trips:trip_detail' item.id %}">Командировка #{{ item.id }}</a>
+            — {{ item.employee_name }}, {{ item.destination }}:
+            бюджет {{ item.budget_limit|floatformat:"-2" }} ₽,
+            расходы {{ item.expenses|floatformat:"-2" }} ₽
+            <span class="badge bg-danger">+{{ item.overrun|floatformat:"-2" }} ₽</span>
+        </li>
+    {% empty %}
+        <li class="list-group-item">Командировок с превышением бюджета нет.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -4,15 +4,25 @@
 
 {% block content %}
 <h1 class="my-4">Командировки ({{ trips|length }})</h1>
+
+<div class="btn-group mb-3" role="group" aria-label="Фильтр по статусу">
+    <a href="{% url 'trips:trips' %}"
+       class="btn btn-outline-primary{% if status == 'all' %} active{% endif %}">Все</a>
+    <a href="{% url 'trips:trips' %}?status=active"
+       class="btn btn-outline-primary{% if status == 'active' %} active{% endif %}">Активные</a>
+    <a href="{% url 'trips:trips' %}?status=cancelled"
+       class="btn btn-outline-primary{% if status == 'cancelled' %} active{% endif %}">Отменённые</a>
+</div>
+
 <ul class="list-group">
     {% for trip in trips %}
         <li class="list-group-item">
             <a href="{% url 'trips:trip_detail' trip.id %}">
                 Командировка #{{ trip.id }}
             </a>
-            — {{ trip.employee.name }},
-            {{ trip.start_date|date:"d.m.Y" }} –
-            {{ trip.end_date|date:"d.m.Y" }}
+            — {{ trip.employee_name }},
+            {{ trip.origin }} → {{ trip.destination }},
+            {{ trip.start_date }} – {{ trip.end_date }}
             {% include "trips/includes/trip_status.html" %}
         </li>
     {% empty %}

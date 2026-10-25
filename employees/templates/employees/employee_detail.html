@@ -10,9 +10,8 @@
     <h1 class="my-4">{{ employee.name }}</h1>
     <div class="card app-card p-3">
         <p><strong>Должность:</strong> {{ employee.position }}</p>
-        <p><strong>Телефон:</strong> {{ employee.phone }}</p>
         <p>
-            <strong>Статус:</strong>
+            <strong>Статус на сегодня:</strong>
             {% if traveling %}
                 <span class="badge bg-warning">В командировке</span>
             {% else %}
@@ -20,6 +19,23 @@
             {% endif %}
         </p>
     </div>
+
+    <h2 class="h4 mt-4">Командировки ({{ trips|length }})</h2>
+    <ul class="list-group">
+        {% for trip in trips %}
+            <li class="list-group-item">
+                <a href="{% url 'trips:trip_detail' trip.id %}">
+                    Командировка #{{ trip.id }}
+                </a>
+                — {{ trip.origin }} → {{ trip.destination }},
+                {{ trip.start_date }} – {{ trip.end_date }}
+                {% include "trips/includes/trip_status.html" %}
+            </li>
+        {% empty %}
+            <li class="list-group-item">Командировок нет</li>
+        {% endfor %}
+    </ul>
+
     <a href="{% url 'employees:employees' %}"
        class="btn btn-outline-secondary mt-3">← к списку сотрудников</a>
 {% else %}

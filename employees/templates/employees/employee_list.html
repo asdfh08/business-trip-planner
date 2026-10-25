@@ -4,6 +4,10 @@
 
 {% block content %}
 <h1 class="my-4">Сотрудники ({{ employees|length }})</h1>
+<p>
+    <a href="{% url 'employees:available' %}"
+       class="btn btn-outline-primary">Найти свободного сотрудника</a>
+</p>
 <ul class="list-group">
     {% for employee in employees %}
         {% include "employees/includes/employee_card.html" %}

@@ -4,21 +4,33 @@
 
 {% block content %}
 <h1 class="my-4">Сервис планирования командировок</h1>
-<p>Добро пожаловать! Выберите раздел:</p>
+<p>
+    Сотрудников в системе: <strong>{{ summary.employees_count }}</strong>,
+    активных командировок: <strong>{{ summary.active_trips_count }}</strong>.
+</p>
+<p>Выберите раздел:</p>
 <div class="row g-3">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="card app-card h-100 p-3">
             <h5>Сотрудники</h5>
-            <p>Список сотрудников и их текущий статус</p>
+            <p>Список сотрудников, их статус и поиск свободных на дату</p>
             <a href="{% url 'employees:employees' %}"
                class="btn btn-outline-primary">Перейти</a>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="card app-card h-100 p-3">
             <h5>Командировки</h5>
             <p>Все командировки, маршруты и бюджеты</p>
             <a href="{% url 'trips:trips' %}"
+               class="btn btn-outline-primary">Перейти</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card app-card h-100 p-3">
+            <h5>Статистика</h5>
+            <p>Командировки по сотрудникам и маршрутам, расходы</p>
+            <a href="{% url 'trips:statistics' %}"
                class="btn btn-outline-primary">Перейти</a>
         </div>
     </div>

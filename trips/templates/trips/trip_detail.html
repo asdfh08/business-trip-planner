@@ -13,25 +13,28 @@
     </h1>
     <div class="card app-card p-3">
         <p><strong>Сотрудник:</strong>
-            <a href="{% url 'employees:employee_detail' trip.employee.id %}">{{ trip.employee.name }}</a>
-            — {{ trip.employee.position|lower }}
+            <a href="{% url 'employees:employee_detail' trip.employee_id %}">{{ trip.employee_name }}</a>
+            — {{ trip.employee_position|lower }}
         </p>
         <p><strong>Маршрут:</strong>
-            {{ trip.route.origin }} → {{ trip.route.destination }}
+            {{ trip.origin }} → {{ trip.destination }} ({{ trip.transport|lower }})
         </p>
         <p><strong>Даты:</strong>
-            {{ trip.start_date|date:"d.m.Y" }} –
-            {{ trip.end_date|date:"d.m.Y" }}
-            ({{ trip.duration }} дн.)
+            {{ trip.start_date }} – {{ trip.end_date }}
+            ({{ trip.duration_days }} дн.)
         </p>
         <p><strong>Бюджет:</strong>
-            {{ trip.budget_limit }} ₽
+            {{ trip.budget_limit|floatformat:"-2" }} ₽
         </p>
         <p><strong>Расходы:</strong>
-            {{ trip.expenses|default_if_none:"не внесены" }}
+            {% if trip.expenses is None %}
+                не внесены
+            {% else %}
+                {{ trip.expenses|floatformat:"-2" }} ₽
+            {% endif %}
         </p>
         <p><strong>Сверка бюджета:</strong>
-            {{ trip.get_budget_status }}
+            {{ trip.budget_status }}
         </p>
     </div>
     <a href="{% url 'trips:trips' %}"
