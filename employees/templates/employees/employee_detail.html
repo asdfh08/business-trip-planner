@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block content %}
-{% if employee %}
     <h1 class="my-4">{{ employee.name }}</h1>
     <div class="card app-card p-3">
         <p><strong>Должность:</strong> {{ employee.position }}</p>
@@ -27,8 +26,9 @@
                 <a href="{% url 'trips:trip_detail' trip.id %}">
                     Командировка #{{ trip.id }}
                 </a>
-                — {{ trip.origin }} → {{ trip.destination }},
-                {{ trip.start_date }} – {{ trip.end_date }}
+                — {{ trip.route.origin }} → {{ trip.route.destination }},
+                {{ trip.start_date|date:"d.m.Y" }} –
+                {{ trip.end_date|date:"d.m.Y" }}
                 {% include "trips/includes/trip_status.html" %}
             </li>
         {% empty %}
@@ -38,9 +38,4 @@
 
     <a href="{% url 'employees:employees' %}"
        class="btn btn-outline-secondary mt-3">← к списку сотрудников</a>
-{% else %}
-    <h1 class="my-4">Сотрудник не найден</h1>
-    <a href="{% url 'employees:employees' %}"
-       class="btn btn-outline-secondary">← к списку сотрудников</a>
-{% endif %}
 {% endblock %}

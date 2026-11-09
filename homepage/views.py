@@ -1,24 +1,18 @@
 """Представления приложения homepage."""
-import sqlite3
-
 from django.shortcuts import render
 
-from db.database import get_connection
-
-SUMMARY_SQL = """
-    SELECT
-        (SELECT COUNT(*) FROM employees) AS employees_count,
-        (SELECT COUNT(*) FROM trips WHERE is_cancelled = 0)
-            AS active_trips_count
-"""
+from employees.models import Employee
+from trips.models import Trip
 
 
 def index(request):
-    """Главная страница сервиса со сводкой из базы данных."""
-    conn = get_connection()
-    conn.row_factory = sqlite3.Row
-    summary = conn.execute(SUMMARY_SQL).fetchone()
-    conn.close()
+    """Главная страница со сводкой, полученной через Django ORM."""
+    summary = {
+        "employees_count": Employee.objects.count(),
+        "active_trips_count": Trip.objects.filter(
+            is_cancelled=False
+        ).count(),
+    }
     return render(request, "homepage/index.html", {"summary": summary})
 
 

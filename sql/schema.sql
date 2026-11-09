@@ -25,10 +25,6 @@ CREATE TABLE IF NOT EXISTS routes (
     transport TEXT NOT NULL
 );
 
--- Даты хранятся строкой в формате YYYY-MM-DD: такие строки
--- сравниваются и сортируются как даты.
--- expenses может быть NULL - расходы ещё не внесены.
--- is_cancelled: 0 - командировка активна, 1 - отменена.
 CREATE TABLE IF NOT EXISTS trips (
     id INTEGER PRIMARY KEY,
     employee_id INTEGER NOT NULL,

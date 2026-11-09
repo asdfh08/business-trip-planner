@@ -1,4 +1,4 @@
-"""Тесты страниц Django, получающих данные из SQLite (ПР7)."""
+"""Тесты страниц Django, получающих данные через Django ORM (ПР9)."""
 
 import os
 
@@ -11,7 +11,10 @@ django.setup()
 from django.test import Client  # noqa: E402
 from django.test.utils import setup_test_environment  # noqa: E402
 
-setup_test_environment()
+try:
+    setup_test_environment()
+except RuntimeError:
+    pass
 
 
 @pytest.fixture

@@ -6,22 +6,23 @@
 {% endblock %}
 
 {% block content %}
-{% if trip %}
     <h1 class="my-4">
         Командировка #{{ trip.id }}
         {% include "trips/includes/trip_status.html" %}
     </h1>
     <div class="card app-card p-3">
         <p><strong>Сотрудник:</strong>
-            <a href="{% url 'employees:employee_detail' trip.employee_id %}">{{ trip.employee_name }}</a>
-            — {{ trip.employee_position|lower }}
+            <a href="{% url 'employees:employee_detail' trip.employee.id %}">{{ trip.employee.name }}</a>
+            — {{ trip.employee.position|lower }}
         </p>
         <p><strong>Маршрут:</strong>
-            {{ trip.origin }} → {{ trip.destination }} ({{ trip.transport|lower }})
+            {{ trip.route.origin }} → {{ trip.route.destination }}
+            ({{ trip.route.transport|lower }})
         </p>
         <p><strong>Даты:</strong>
-            {{ trip.start_date }} – {{ trip.end_date }}
-            ({{ trip.duration_days }} дн.)
+            {{ trip.start_date|date:"d.m.Y" }} –
+            {{ trip.end_date|date:"d.m.Y" }}
+            ({{ trip.duration }} дн.)
         </p>
         <p><strong>Бюджет:</strong>
             {{ trip.budget_limit|floatformat:"-2" }} ₽
@@ -39,9 +40,4 @@
     </div>
     <a href="{% url 'trips:trips' %}"
        class="btn btn-outline-secondary mt-3">← к списку командировок</a>
-{% else %}
-    <h1 class="my-4">Командировка не найдена</h1>
-    <a href="{% url 'trips:trips' %}"
-       class="btn btn-outline-secondary">← к списку командировок</a>
-{% endif %}
 {% endblock %}
